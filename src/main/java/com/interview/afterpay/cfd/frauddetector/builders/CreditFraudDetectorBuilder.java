@@ -1,9 +1,8 @@
-package com.interview.afterpay.cfd.frauddetectors.builders;
+package com.interview.afterpay.cfd.frauddetector.builders;
 
 
-import com.interview.afterpay.cfd.frauddetectors.BatchCreditFraudDetector;
-import com.interview.afterpay.cfd.frauddetectors.DetectorSpec;
-import com.interview.afterpay.cfd.frauddetectors.rules.FraudDetectionRule;
+import com.interview.afterpay.cfd.frauddetector.BatchCreditFraudDetector;
+import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
 import com.interview.afterpay.cfd.record.CreditRecord;
 
 import java.util.List;
@@ -21,28 +20,34 @@ public class CreditFraudDetectorBuilder implements FraudDetectorBuilder<CreditRe
     }
 
     @Override
-    public void registerRuleSet(List<FraudDetectionRule> rules) {
+    public FraudDetectorBuilder registerRuleSet(List<FraudDetectionRule> rules) {
         for(FraudDetectionRule rule: rules) {
             this.detector.addRule(rule);
         }
+
+        return this;
     }
 
     @Override
-    public void notifyOnSuccess(List<Observer> observers) {
+    public FraudDetectorBuilder notifyOnSuccess(List<Observer> observers) {
         for (Observer observer: observers) {
             this.detector.registerOnSuccessObserver(observer);
         }
+
+        return this;
     }
 
     @Override
-    public void notifyOnFailure(List<Observer> observers) {
+    public FraudDetectorBuilder notifyOnFailure(List<Observer> observers) {
         for (Observer observer: observers) {
             this.detector.registerOnFailureObserver(observer);
         }
+
+        return this;
     }
 
     @Override
-    public DetectorSpec<CreditRecord> build() {
+    public BatchCreditFraudDetector build() {
         return this.detector;
     }
 }

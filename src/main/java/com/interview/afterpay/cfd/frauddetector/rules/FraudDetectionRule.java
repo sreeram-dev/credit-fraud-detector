@@ -1,6 +1,4 @@
-package com.interview.afterpay.cfd.frauddetectors.rules;
-
-import com.interview.afterpay.cfd.record.CreditRecord;
+package com.interview.afterpay.cfd.frauddetector.rules;
 
 import java.util.List;
 

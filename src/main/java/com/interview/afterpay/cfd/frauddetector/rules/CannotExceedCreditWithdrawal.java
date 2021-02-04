@@ -1,4 +1,4 @@
-package com.interview.afterpay.cfd.frauddetectors.rules;
+package com.interview.afterpay.cfd.frauddetector.rules;
 
 import com.interview.afterpay.cfd.record.CreditRecord;
 
