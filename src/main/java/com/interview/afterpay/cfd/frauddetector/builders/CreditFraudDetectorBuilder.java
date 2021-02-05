@@ -3,7 +3,7 @@ package com.interview.afterpay.cfd.frauddetector.builders;
 
 import com.interview.afterpay.cfd.frauddetector.BatchCreditFraudDetector;
 import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
-import com.interview.afterpay.cfd.record.CreditRecord;
+import com.interview.afterpay.cfd.entities.CreditRecord;
 
 import java.util.List;
 import java.util.Observer;

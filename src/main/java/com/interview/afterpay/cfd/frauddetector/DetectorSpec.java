@@ -1,9 +1,8 @@
 package com.interview.afterpay.cfd.frauddetector;
 
 import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
-import com.interview.afterpay.cfd.result.FraudResult;
+import com.interview.afterpay.cfd.entities.FraudResult;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Observer;
 
