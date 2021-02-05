@@ -1,6 +1,6 @@
-package com.interview.afterpay.cfd.frauddetector.rules;
+package com.interview.afterpay.frauddetector.rules;
 
-import com.interview.afterpay.cfd.entities.CreditRecord;
+import com.interview.afterpay.entities.CreditRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

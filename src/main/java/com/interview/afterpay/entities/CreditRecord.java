@@ -1,4 +1,4 @@
-package com.interview.afterpay.cfd.entities;
+package com.interview.afterpay.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

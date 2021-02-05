@@ -1,4 +1,4 @@
-package com.interview.afterpay.cfd.frauddetector.rules;
+package com.interview.afterpay.frauddetector.rules;
 
 import java.util.List;
 

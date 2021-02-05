@@ -1,6 +1,6 @@
-package com.interview.afterpay.cfd.processor;
+package com.interview.afterpay.processor;
 
-import com.interview.afterpay.cfd.entities.CreditRecord;
+import com.interview.afterpay.entities.CreditRecord;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;

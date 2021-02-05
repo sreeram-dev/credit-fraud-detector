@@ -1,9 +1,9 @@
-package com.interview.afterpay.cfd.frauddetector;
+package com.interview.afterpay.frauddetector;
 
-import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
-import com.interview.afterpay.cfd.entities.CreditRecord;
-import com.interview.afterpay.cfd.entities.CreditFraudResult;
-import com.interview.afterpay.cfd.entities.FraudResult;
+import com.interview.afterpay.frauddetector.rules.FraudDetectionRule;
+import com.interview.afterpay.entities.CreditRecord;
+import com.interview.afterpay.entities.CreditFraudResult;
+import com.interview.afterpay.entities.FraudResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
