@@ -20,8 +20,8 @@ public class CreditFraudDetectorBuilder implements FraudDetectorBuilder<CreditRe
     }
 
     @Override
-    public FraudDetectorBuilder registerRuleSet(List<FraudDetectionRule> rules) {
-        for(FraudDetectionRule rule: rules) {
+    public CreditFraudDetectorBuilder registerRuleSet(List<FraudDetectionRule<CreditRecord>> rules) {
+        for(FraudDetectionRule<CreditRecord> rule: rules) {
             this.detector.addRule(rule);
         }
 
@@ -29,7 +29,7 @@ public class CreditFraudDetectorBuilder implements FraudDetectorBuilder<CreditRe
     }
 
     @Override
-    public FraudDetectorBuilder notifyOnSuccess(List<Observer> observers) {
+    public CreditFraudDetectorBuilder notifyOnSuccess(List<Observer> observers) {
         for (Observer observer: observers) {
             this.detector.registerOnSuccessObserver(observer);
         }
@@ -38,7 +38,7 @@ public class CreditFraudDetectorBuilder implements FraudDetectorBuilder<CreditRe
     }
 
     @Override
-    public FraudDetectorBuilder notifyOnFailure(List<Observer> observers) {
+    public CreditFraudDetectorBuilder notifyOnFailure(List<Observer> observers) {
         for (Observer observer: observers) {
             this.detector.registerOnFailureObserver(observer);
         }

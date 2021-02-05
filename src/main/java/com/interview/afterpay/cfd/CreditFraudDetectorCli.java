@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 
 import com.interview.afterpay.cfd.entities.CreditFraudResult;
 import com.interview.afterpay.cfd.frauddetector.BatchCreditFraudDetector;
+import com.interview.afterpay.cfd.frauddetector.DetectorSpec;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,12 +36,12 @@ import com.interview.afterpay.cfd.entities.FraudResult;
     mixinStandardHelpOptions = true,
     version = "cfd 0.1",
     description = "Checks a csv file with credit card statements for fraud")
-public class CreditFraudDetectorCli implements Callable<FraudResult> {
+public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord>> {
 
     static final Logger logger = LogManager.getLogger(CreditFraudDetectorCli.class.getCanonicalName());
 
-    CreditFileProcessor processor = new CreditFileProcessor();
-    Duration duration = Duration.ofHours(24);
+    final CreditFileProcessor processor = new CreditFileProcessor();
+    final Duration duration = Duration.ofHours(24);
 
     @Parameters(index = "0", converter = AmountConverter.class,
         description = "Amount in dollars and cents (10.00) to set " +
@@ -84,7 +85,7 @@ public class CreditFraudDetectorCli implements Callable<FraudResult> {
             .setParameterExceptionHandler(new StackTracePrintHandler());
 
         int exitCode = cmd.execute(args);
-        CreditFraudResult result = (CreditFraudResult) cmd.getExecutionResult();
+        CreditFraudResult result = cmd.getExecutionResult();
         for (String id: result.getDistinctHashedIds()) {
             System.out.println(id);
         }
@@ -92,22 +93,21 @@ public class CreditFraudDetectorCli implements Callable<FraudResult> {
     }
 
     @Override
-    public FraudResult call() throws Exception {
+    public FraudResult<CreditRecord> call() throws Exception {
         // keeping it separate to make changes according to the file
         List<CreditRecord> records = processor.processFile(report);
         logger.info("Found " + records.size() + " records in the file: " + report.getCanonicalPath());
         // initialise the rules
-        List<FraudDetectionRule> rules = new ArrayList<>();
+        List<FraudDetectionRule<CreditRecord>> rules = new ArrayList<>();
         rules.add(new CannotExceedCreditWithdrawal(amount, duration));
 
         // Detect fraud
-        BatchCreditFraudDetector detector =  (BatchCreditFraudDetector) new CreditFraudDetectorBuilder()
+        BatchCreditFraudDetector detector = new CreditFraudDetectorBuilder()
             .registerRuleSet(rules)
             .build();
 
         // print the result
-        FraudResult result = detector.detectAndGetFraudulentRecords(records);
-        return result;
+        return detector.detectAndGetFraudulentRecords(records);
     }
 }
 

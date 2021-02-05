@@ -12,19 +12,19 @@ public interface FraudDetectorBuilder<T> {
      * Register the rules that will validate the dataset.
      * @param rules
      */
-    FraudDetectorBuilder registerRuleSet(List<FraudDetectionRule> rules);
+    FraudDetectorBuilder<T> registerRuleSet(List<FraudDetectionRule<T>> rules);
 
     /**
      * On Success, notify the registered observers about the job.
      * @param observers
      */
-    FraudDetectorBuilder notifyOnSuccess(List<Observer> observers);
+    FraudDetectorBuilder<T> notifyOnSuccess(List<Observer> observers);
 
     /**
      * On Failure, notify the registered the observers about the job.
      * @param observers
      */
-    FraudDetectorBuilder notifyOnFailure(List<Observer> observers);
+    FraudDetectorBuilder<T> notifyOnFailure(List<Observer> observers);
 
     /**
      * Return the fraud detector with registered observers and ruleset.
