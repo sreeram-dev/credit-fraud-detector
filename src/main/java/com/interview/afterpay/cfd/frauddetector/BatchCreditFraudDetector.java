@@ -45,7 +45,7 @@ public class BatchCreditFraudDetector implements DetectorSpec<CreditRecord> {
             for(Observer observer: onFailureObservers) {
                 observer.notify();
             }
-
+            e.printStackTrace();
             return null;
         }
 

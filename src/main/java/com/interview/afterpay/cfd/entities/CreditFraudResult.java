@@ -11,6 +11,7 @@ public class CreditFraudResult implements FraudResult<CreditRecord>, Serializabl
 
     // empty constructor
     public CreditFraudResult() {
+        this.rawData = new HashMap<>();
     }
 
     public CreditFraudResult(Map<FraudDetectionRule, List<CreditRecord>> rawData) {
@@ -54,7 +55,8 @@ public class CreditFraudResult implements FraudResult<CreditRecord>, Serializabl
         StringBuilder builder = new StringBuilder();
         builder.append("\nFraud Result: \n");
         for (Map.Entry<FraudDetectionRule, List<CreditRecord>> kv: rawData.entrySet()) {
-            builder.append("Constraint: " + kv.getKey().toString() + " num records: " + kv.getValue().size());
+            builder.append("Constraint: " + kv.getKey().toString());
+            builder.append("Number of Records for Constraint: " + kv.getValue().size() + "\n");
         }
 
         return builder.toString();

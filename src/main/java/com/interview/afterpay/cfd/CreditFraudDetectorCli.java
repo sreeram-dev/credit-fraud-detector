@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import com.interview.afterpay.cfd.frauddetector.BatchCreditFraudDetector;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +22,6 @@ import picocli.CommandLine.IExecutionExceptionHandler;
 import picocli.CommandLine.IParameterExceptionHandler;
 import picocli.CommandLine.ParameterException;
 
-import com.interview.afterpay.cfd.frauddetector.DetectorSpec;
 import com.interview.afterpay.cfd.frauddetector.builders.CreditFraudDetectorBuilder;
 import com.interview.afterpay.cfd.frauddetector.rules.CannotExceedCreditWithdrawal;
 import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
@@ -81,12 +81,10 @@ public class CreditFraudDetectorCli implements Callable<String> {
                 return new CommandLine.RunLast().execute(parseResult);
             })
             .setParameterExceptionHandler(new StackTracePrintHandler());
-            //.setExecutionExceptionHandler(new BusinessStackTraceHandler());
 
         int exitCode = cmd.execute(args);
-        String result = cmd.getExecutionResult();
-        System.out.println(result);
-        logger.info("Result: " + result);
+        String execResult = cmd.getExecutionResult();
+        System.out.println(execResult);
         System.exit(exitCode);
     }
 
@@ -100,21 +98,18 @@ public class CreditFraudDetectorCli implements Callable<String> {
         rules.add(new CannotExceedCreditWithdrawal(amount, duration));
 
         // Detect fraud
-        DetectorSpec detector =  new CreditFraudDetectorBuilder()
+        BatchCreditFraudDetector detector =  (BatchCreditFraudDetector) new CreditFraudDetectorBuilder()
             .registerRuleSet(rules)
             .build();
 
         // print the result
         FraudResult result = detector.detectAndGetFraudulentRecords(records);
-
-        return "hello";
+        return result.toString();
     }
 }
 
 
 class AmountConverter implements ITypeConverter<Integer> {
-    static final Logger logger = LogManager.getLogger(CreditFraudDetectorCli.class.getCanonicalName());
-
 
     public Integer convert(String value) throws Exception {
         Integer val = (int) (Double.parseDouble(value) * 100);
