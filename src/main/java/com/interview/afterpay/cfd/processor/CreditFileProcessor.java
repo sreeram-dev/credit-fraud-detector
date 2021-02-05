@@ -47,7 +47,7 @@ public class CreditFileProcessor implements Processor<CreditRecord> {
             records.add(processLineAndGetRecord(line));
         }
 
-        return new ArrayList<>();
+        return records;
     }
 
     private CreditRecord processLineAndGetRecord(String[] line) {

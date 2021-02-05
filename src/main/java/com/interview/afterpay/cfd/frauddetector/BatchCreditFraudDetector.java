@@ -4,9 +4,10 @@ import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
 import com.interview.afterpay.cfd.entities.CreditRecord;
 import com.interview.afterpay.cfd.entities.CreditFraudResult;
 import com.interview.afterpay.cfd.entities.FraudResult;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Observer;
 
@@ -24,7 +25,8 @@ public class BatchCreditFraudDetector implements DetectorSpec<CreditRecord> {
     private final List<Observer> onSuccessObservers = new ArrayList<>();
     private final List<Observer> onFailureObservers = new ArrayList<>();
 
-    private final List<CreditRecord> fraudulentRecords = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger(
+        BatchCreditFraudDetector.class.getCanonicalName());
 
     @Override
     public void addRule(FraudDetectionRule rule) {
@@ -33,7 +35,7 @@ public class BatchCreditFraudDetector implements DetectorSpec<CreditRecord> {
 
     @Override
     public FraudResult detectAndGetFraudulentRecords(List<CreditRecord> dataSet) {
-
+        logger.info("Starting fraudulent record service for " + dataSet.size() + " records");
         FraudResult result = new CreditFraudResult();
 
         try {

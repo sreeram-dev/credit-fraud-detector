@@ -5,7 +5,7 @@ import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
 import java.io.Serializable;
 import java.util.*;
 
-public class CreditFraudResult implements FraudResult<CreditRecord>, Serializable {
+public class CreditFraudResult implements FraudResult<CreditRecord> {
 
     private Map<FraudDetectionRule, List<CreditRecord>> rawData;
 
@@ -56,7 +56,10 @@ public class CreditFraudResult implements FraudResult<CreditRecord>, Serializabl
         builder.append("\nFraud Result: \n");
         for (Map.Entry<FraudDetectionRule, List<CreditRecord>> kv: rawData.entrySet()) {
             builder.append("Constraint: " + kv.getKey().toString());
-            builder.append("Number of Records for Constraint: " + kv.getValue().size() + "\n");
+            builder.append("hashedIds which failed the Constraint: \n");
+            for (String id: getDistinctIdsFromFailedRecords(getAllRecords())) {
+                builder.append(id + "\n");
+            }
         }
 
         return builder.toString();
@@ -65,5 +68,26 @@ public class CreditFraudResult implements FraudResult<CreditRecord>, Serializabl
     @Override
     public void addRuleAndRecords(FraudDetectionRule rule, List<CreditRecord> records) {
         this.rawData.put(rule, records);
+    }
+
+    private Set<String> getDistinctIdsFromFailedRecords(List<CreditRecord> records) {
+        Set<String> ids = new HashSet<>();
+        for (CreditRecord record: records) {
+            ids.add(record.getHashedCardId());
+        }
+        return ids;
+    }
+
+    /**
+     * Get all the failed hashedids regardless of constraint
+     * @return
+     */
+    public Set<String> getDistinctHashedIds() {
+        Set<String> ids = new HashSet<>();
+        for (CreditRecord record: getAllRecords()) {
+            ids.add(record.getHashedCardId());
+        }
+
+        return ids;
     }
 }
