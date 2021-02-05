@@ -92,7 +92,7 @@ public class CreditFraudDetectorCli implements Callable<String> {
     public String call() throws Exception {
         // keeping it separate to make changes according to the file
         List<CreditRecord> records = processor.processFile(report);
-
+        logger.info("Found " + records.size() + " records in the file: " + report.getCanonicalPath());
         // initialise the rules
         List<FraudDetectionRule> rules = new ArrayList<>();
         rules.add(new CannotExceedCreditWithdrawal(amount, duration));

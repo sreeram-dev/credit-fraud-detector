@@ -56,7 +56,10 @@ public class CreditFraudResult implements FraudResult<CreditRecord>, Serializabl
         builder.append("\nFraud Result: \n");
         for (Map.Entry<FraudDetectionRule, List<CreditRecord>> kv: rawData.entrySet()) {
             builder.append("Constraint: " + kv.getKey().toString());
-            builder.append("Number of Records for Constraint: " + kv.getValue().size() + "\n");
+            builder.append("Number of hashedIds for Constraint: \n");
+            for (CreditRecord record: getAllRecords()) {
+                builder.append(record.getHashedCardId() + "\n");
+            }
         }
 
         return builder.toString();
