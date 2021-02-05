@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import com.interview.afterpay.cfd.entities.CreditFraudResult;
 import com.interview.afterpay.cfd.frauddetector.BatchCreditFraudDetector;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +35,7 @@ import com.interview.afterpay.cfd.entities.FraudResult;
     mixinStandardHelpOptions = true,
     version = "cfd 0.1",
     description = "Checks a csv file with credit card statements for fraud")
-public class CreditFraudDetectorCli implements Callable<String> {
+public class CreditFraudDetectorCli implements Callable<FraudResult> {
 
     static final Logger logger = LogManager.getLogger(CreditFraudDetectorCli.class.getCanonicalName());
 
@@ -83,13 +84,15 @@ public class CreditFraudDetectorCli implements Callable<String> {
             .setParameterExceptionHandler(new StackTracePrintHandler());
 
         int exitCode = cmd.execute(args);
-        String execResult = cmd.getExecutionResult();
-        System.out.println(execResult);
+        CreditFraudResult result = (CreditFraudResult) cmd.getExecutionResult();
+        for (String id: result.getDistinctHashedIds()) {
+            System.out.println(id);
+        }
         System.exit(exitCode);
     }
 
     @Override
-    public String call() throws Exception {
+    public FraudResult call() throws Exception {
         // keeping it separate to make changes according to the file
         List<CreditRecord> records = processor.processFile(report);
         logger.info("Found " + records.size() + " records in the file: " + report.getCanonicalPath());
@@ -104,7 +107,7 @@ public class CreditFraudDetectorCli implements Callable<String> {
 
         // print the result
         FraudResult result = detector.detectAndGetFraudulentRecords(records);
-        return result.toString();
+        return result;
     }
 }
 

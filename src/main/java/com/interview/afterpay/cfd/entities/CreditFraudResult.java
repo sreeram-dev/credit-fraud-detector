@@ -77,4 +77,17 @@ public class CreditFraudResult implements FraudResult<CreditRecord> {
         }
         return ids;
     }
+
+    /**
+     * Get all the failed hashedids regardless of constraint
+     * @return
+     */
+    public Set<String> getDistinctHashedIds() {
+        Set<String> ids = new HashSet<>();
+        for (CreditRecord record: getAllRecords()) {
+            ids.add(record.getHashedCardId());
+        }
+
+        return ids;
+    }
 }
