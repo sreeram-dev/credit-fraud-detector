@@ -1,4 +1,4 @@
-package com.interview.afterpay.cfd.record;
+package com.interview.afterpay.cfd.validators;
 
 import java.time.LocalDateTime;
 

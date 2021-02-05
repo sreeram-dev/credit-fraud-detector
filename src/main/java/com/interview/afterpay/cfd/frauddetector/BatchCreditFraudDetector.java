@@ -1,9 +1,9 @@
 package com.interview.afterpay.cfd.frauddetector;
 
 import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
-import com.interview.afterpay.cfd.record.CreditRecord;
-import com.interview.afterpay.cfd.result.CreditFraudResult;
-import com.interview.afterpay.cfd.result.FraudResult;
+import com.interview.afterpay.cfd.entities.CreditRecord;
+import com.interview.afterpay.cfd.entities.CreditFraudResult;
+import com.interview.afterpay.cfd.entities.FraudResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,18 +34,18 @@ public class BatchCreditFraudDetector implements DetectorSpec<CreditRecord> {
     @Override
     public FraudResult detectAndGetFraudulentRecords(List<CreditRecord> dataSet) {
 
-        HashMap<FraudDetectionRule, List<CreditRecord>> map = new HashMap<>();
+        FraudResult result = new CreditFraudResult();
 
         try {
             for (FraudDetectionRule rule : rules) {
                 List<CreditRecord> records = rule.validateDateSetAndGetAnomalies(dataSet);
-                map.put(rule, records);
+                result.addRuleAndRecords(rule, records);
             }
         } catch(Exception e) {
             for(Observer observer: onFailureObservers) {
                 observer.notify();
             }
-
+            e.printStackTrace();
             return null;
         }
 
@@ -53,7 +53,7 @@ public class BatchCreditFraudDetector implements DetectorSpec<CreditRecord> {
             observer.notify();
         }
 
-        return new CreditFraudResult(map);
+        return result;
     }
 
     @Override
