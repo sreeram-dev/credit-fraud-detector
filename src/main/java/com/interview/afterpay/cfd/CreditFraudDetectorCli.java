@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import com.interview.afterpay.entities.CreditFraudResult;
@@ -84,10 +85,6 @@ public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord
             .setParameterExceptionHandler(new StackTracePrintHandler());
 
         int exitCode = cmd.execute(args);
-        CreditFraudResult result = cmd.getExecutionResult();
-        for (String id: result.getDistinctHashedIds()) {
-            System.out.println(id);
-        }
         System.exit(exitCode);
     }
 
@@ -106,7 +103,13 @@ public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord
             .build();
 
         // print the result
-        return detector.detectAndGetFraudulentRecords(records);
+        CreditFraudResult result =  (CreditFraudResult) detector.detectAndGetFraudulentRecords(records);
+        Set<String> ids = result.getDistinctHashedIds();
+        for (String id: ids) {
+            System.out.println(id);
+        }
+
+        return result;
     }
 }
 
