@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.interview.afterpay.cfd.entities.CreditFraudResult;
-import com.interview.afterpay.cfd.frauddetector.BatchCreditFraudDetector;
-import com.interview.afterpay.cfd.frauddetector.DetectorSpec;
+import com.interview.afterpay.entities.CreditFraudResult;
+import com.interview.afterpay.frauddetector.BatchCreditFraudDetector;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +23,12 @@ import picocli.CommandLine.IExecutionExceptionHandler;
 import picocli.CommandLine.IParameterExceptionHandler;
 import picocli.CommandLine.ParameterException;
 
-import com.interview.afterpay.cfd.frauddetector.builders.CreditFraudDetectorBuilder;
-import com.interview.afterpay.cfd.frauddetector.rules.CannotExceedCreditWithdrawal;
-import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
-import com.interview.afterpay.cfd.processor.CreditFileProcessor;
-import com.interview.afterpay.cfd.entities.CreditRecord;
-import com.interview.afterpay.cfd.entities.FraudResult;
+import com.interview.afterpay.frauddetector.builders.CreditFraudDetectorBuilder;
+import com.interview.afterpay.frauddetector.rules.CannotExceedCreditWithdrawal;
+import com.interview.afterpay.frauddetector.rules.FraudDetectionRule;
+import com.interview.afterpay.processor.CreditFileProcessor;
+import com.interview.afterpay.entities.CreditRecord;
+import com.interview.afterpay.entities.FraudResult;
 
 
 @Command(name = "cfd",

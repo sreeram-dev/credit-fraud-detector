@@ -1,7 +1,7 @@
-package com.interview.afterpay.cfd.frauddetector;
+package com.interview.afterpay.frauddetector;
 
-import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
-import com.interview.afterpay.cfd.entities.FraudResult;
+import com.interview.afterpay.frauddetector.rules.FraudDetectionRule;
+import com.interview.afterpay.entities.FraudResult;
 
 import java.util.List;
 import java.util.Observer;

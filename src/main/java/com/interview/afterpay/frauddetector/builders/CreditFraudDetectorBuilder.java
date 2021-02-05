@@ -1,9 +1,9 @@
-package com.interview.afterpay.cfd.frauddetector.builders;
+package com.interview.afterpay.frauddetector.builders;
 
 
-import com.interview.afterpay.cfd.frauddetector.BatchCreditFraudDetector;
-import com.interview.afterpay.cfd.frauddetector.rules.FraudDetectionRule;
-import com.interview.afterpay.cfd.entities.CreditRecord;
+import com.interview.afterpay.frauddetector.BatchCreditFraudDetector;
+import com.interview.afterpay.frauddetector.rules.FraudDetectionRule;
+import com.interview.afterpay.entities.CreditRecord;
 
 import java.util.List;
 import java.util.Observer;
