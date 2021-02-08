@@ -90,34 +90,6 @@ class CreditFraudDetectorCliTest {
     }
 
     @Test
-    public void testCLIInputWithDollarSign() {
-        String[] args = {"$150.00", "src/test/resources/testcase_valid_overlapping.csv"};
-        CommandLine cmd = new CommandLine(new CreditFraudDetectorCli());
-        cmd.execute(args);
-        CreditFraudResult result = cmd.getExecutionResult();
-        List<String> records = new ArrayList<>(result.getDistinctHashedIds());
-
-        assertEquals(2, records.size());
-        assertThat(records, hasItem("10d7ce2f43e35fa57d1bbf8b1e2"));
-        String[] actualOutput = out.toString().split("\n");
-        assertThat(new ArrayList<>(Arrays.asList(actualOutput)),
-            hasItems("10d7ce2f43e35fa57d1bbf8b1e2", "20e6ce2f43e35fa57d1bbf8b1e2"));
-
-        out.reset();
-        err.reset();
-        args = new String[]{"150.00$", "src/test/resources/testcase_valid_overlapping.csv"};
-        cmd.execute(args);
-        result = cmd.getExecutionResult();
-        records = new ArrayList<>(result.getDistinctHashedIds());
-        assertEquals(2, records.size());
-
-        assertEquals("10d7ce2f43e35fa57d1bbf8b1e2", records.get(0));
-        actualOutput = out.toString().split("\n");
-        assertThat(new ArrayList<>(Arrays.asList(actualOutput)),
-            hasItems("10d7ce2f43e35fa57d1bbf8b1e2", "20e6ce2f43e35fa57d1bbf8b1e2"));
-    }
-
-    @Test
     public void testCLIEmptyOutput() {
         String[] args = {"1500.00", "src/test/resources/testcase_valid_1.csv"};
         CommandLine cmd = new CommandLine(new CreditFraudDetectorCli());
@@ -153,7 +125,7 @@ class CreditFraudDetectorCliTest {
 
     @Test
     public void testCLIOverlappingFrauds() {
-        String[] args = {"$150.00", "src/test/resources/testcase_valid_overlapping.csv"};
+        String[] args = {"150.00", "src/test/resources/testcase_valid_overlapping.csv"};
         CommandLine cmd = new CommandLine(new CreditFraudDetectorCli());
         int exitCode =  cmd.execute(args);
         CreditFraudResult result = cmd.getExecutionResult();

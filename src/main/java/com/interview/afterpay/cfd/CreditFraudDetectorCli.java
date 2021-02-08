@@ -133,12 +133,6 @@ class AmountConverter implements ITypeConverter<Integer> {
         if  (value.isEmpty()) {
             throw new IllegalArgumentException("Amount is not specified");
         }
-        // trim the dollar sign
-        if (value.charAt(0) == '$') {
-            value = value.substring(1);
-        } else if (value.charAt(value.length()-1) == '$') {
-            value = value.substring(0, value.length()-1);
-        }
 
         Integer val = (int) (Double.parseDouble(value) * 100);
 
