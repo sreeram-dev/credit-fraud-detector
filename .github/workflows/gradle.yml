@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
@@ -30,6 +30,8 @@ jobs:
     - name: Generate Jacoco Badge
       id: jacoco
       uses: cicirello/jacoco-badge-generator@v1.1.0
+      with:
+        jacoco-csv-file: build/reports/test/jacocoTestReport.csv
 
     - name: Log coverage percentage
       run: |
