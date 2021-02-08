@@ -41,7 +41,9 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
      */
     @Override
     public List<CreditRecord> validateDateSetAndGetAnomalies(List<CreditRecord> creditRecords) {
-        logger.info("Validating " + creditRecords.size() + " records against the constraint");
+        logger.info("Validating " + creditRecords.size()
+            + " records against the constraint with threshold amount: "
+            + this.thresholdAmount);
         List<CreditRecord> failedRecords = new ArrayList<>();
 
         Map<String, List<CreditRecord>> limits = new HashMap<>();

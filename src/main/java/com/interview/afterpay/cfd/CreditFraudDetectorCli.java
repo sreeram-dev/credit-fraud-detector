@@ -43,14 +43,14 @@ public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord
     final Duration duration = Duration.ofHours(24);
 
     @Parameters(index = "0", converter = AmountConverter.class,
-        description = "Amount in dollars and cents (10.00) to set " +
-            "as threshold for fraudulent transactions", paramLabel = "FLOAT")
+        description = "Amount in dollars (1.00) to set " +
+            "as threshold for fraudulent transactions", paramLabel = "Amount in Dollars (1.00)")
     private Integer amount;
 
     private File report;
 
     @Parameters(index = "1",
-        description = "Path to the credit report", paramLabel="FILE")
+        description = "Path to the credit report", paramLabel="Credit Report CSV file")
     private void setReport(File file) {
         // If the file does not exist or cannot be read, Throw an exception when parsing the arguments
         if (!file.exists()) {
@@ -130,7 +130,20 @@ public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord
 class AmountConverter implements ITypeConverter<Integer> {
 
     public Integer convert(String value) throws Exception {
+
+        if  (value.isEmpty()) {
+            throw new IllegalArgumentException("Amount is not specified");
+        }
+        // trim the dollar sign
+        if (value.charAt(0) == '$') {
+            value = value.substring(1);
+            LogManager.getRootLogger().info("value processed: " + value);
+        } else if (value.charAt(value.length()-1) == '$') {
+            value = value.substring(0, value.length()-1);
+        }
+
         Integer val = (int) (Double.parseDouble(value) * 100);
+
         return val;
     }
 }
