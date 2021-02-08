@@ -63,9 +63,10 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
                 LocalDateTime curTime = curRecord.getTransactionTime();
                 if (Duration.between(thresholdTime, curTime).isNegative()) {
                     // atomic condition to prevent race conditions
-
-                    limits.get(id).remove(0);
-                    runningSum.put(id, runningSum.get(id) - curRecord.getAmountInCents());
+                    synchronized (this) {
+                        limits.get(id).remove(0);
+                        runningSum.put(id, runningSum.get(id) - curRecord.getAmountInCents());
+                    }
                 } else {
                     break;
                 }
@@ -73,13 +74,18 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
 
             if (!limits.containsKey(id)) {
                 // atomic condition to prevent race conditions
-                runningSum.put(id, record.getAmountInCents());
-                limits.put(id, new ArrayList<>());
+                synchronized (this) {
+                    runningSum.put(id, record.getAmountInCents());
+                    limits.put(id, new ArrayList<>());
+                    limits.get(id).add(record);
+                }
             } else {
-                runningSum.put(id, runningSum.get(id) + record.getAmountInCents());
+                synchronized (this) {
+                    runningSum.put(id, runningSum.get(id) + record.getAmountInCents());
+                    limits.get(id).add(record);
+                }
             }
 
-            limits.get(id).add(record);
 
             // Check if the sum in the last 24 hours exceeds the threshold amount
             if (runningSum.get(id) > this.thresholdAmount) {
