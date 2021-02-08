@@ -23,7 +23,7 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
     public CannotExceedCreditWithdrawal(Integer amount, Duration duration) {
         this.thresholdAmount = amount;
         this.windowDuration = duration;
-        logger.info("thresholdAmount: " + amount + " windowDuration: " + duration.toHours() + " hours");
+        logger.debug("thresholdAmount: " + amount + " windowDuration: " + duration.toHours() + " hours");
     }
 
     /**
@@ -52,7 +52,7 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
             LocalDateTime currentTime = record.getTransactionTime();
             // minus 24 hours
             LocalDateTime thresholdTime = currentTime.minusHours(this.windowDuration.toHours());
-            logger.info("Record: " + record.getHashedCardId() +
+            logger.debug("Record: " + record.getHashedCardId() +
                 ": transactionTime: " + currentTime +
                 " thresholdTime: " + thresholdTime + " current sum: " + runningSum.getOrDefault(id, 0));
 
@@ -63,7 +63,7 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
                     // atomic condition to prevent race conditions
 
                     limits.get(id).remove(0);
-                    runningSum.put(id, runningSum.get(id) - curRecord.getAmount());
+                    runningSum.put(id, runningSum.get(id) - curRecord.getAmountInCents());
                 } else {
                     break;
                 }
@@ -71,17 +71,17 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
 
             if (!limits.containsKey(id)) {
                 // atomic condition to prevent race conditions
-                runningSum.put(id, record.getAmount());
+                runningSum.put(id, record.getAmountInCents());
                 limits.put(id, new ArrayList<>());
             } else {
-                runningSum.put(id, runningSum.get(id) + record.getAmount());
+                runningSum.put(id, runningSum.get(id) + record.getAmountInCents());
             }
 
             limits.get(id).add(record);
 
             // Check if the sum in the last 24 hours exceeds the threshold amount
             if (runningSum.get(id) > this.thresholdAmount) {
-                logger.info("FAILING id: " + id + " amount: " + runningSum.get(id) + " threshold: " + this.thresholdAmount);
+                logger.debug("FAILING id: " + id + " amount: " + runningSum.get(id) + " threshold: " + this.thresholdAmount);
                 failedRecords.add(record);
             }
         }

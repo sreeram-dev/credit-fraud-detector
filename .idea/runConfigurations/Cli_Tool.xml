@@ -2,7 +2,7 @@
   <configuration default="false" name="Cli Tool" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.interview.afterpay.cfd.CreditFraudDetectorCli" />
     <module name="credit-fraud-detector.main" />
-    <option name="PROGRAM_PARAMETERS" value="150.00 src/test/resources/testcase_valid_2.csv -vv" />
+    <option name="PROGRAM_PARAMETERS" value="150.00 asad -v" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.interview.afterpay.cfd.*" />

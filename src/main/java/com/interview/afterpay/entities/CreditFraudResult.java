@@ -20,7 +20,8 @@ public class CreditFraudResult implements FraudResult<CreditRecord> {
     @Override
     public List<CreditRecord> getAllRecords() {
         // a single record may fail multiple constraints
-        Set<CreditRecord> total = new HashSet();
+        // set returns an unordered list of items
+        Set<CreditRecord> total = new HashSet<>();
         for (List<CreditRecord> fraudRecords: rawData.values()) {
             for (CreditRecord record: fraudRecords) {
                 total.add(record);

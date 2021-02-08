@@ -20,7 +20,7 @@ import java.util.Observer;
  */
 public class BatchCreditFraudDetector implements DetectorSpec<CreditRecord> {
 
-    private final List<FraudDetectionRule> rules = new ArrayList<>();
+    private final List<FraudDetectionRule<CreditRecord>> rules = new ArrayList<>();
 
     private final List<Observer> onSuccessObservers = new ArrayList<>();
     private final List<Observer> onFailureObservers = new ArrayList<>();
@@ -29,17 +29,17 @@ public class BatchCreditFraudDetector implements DetectorSpec<CreditRecord> {
         BatchCreditFraudDetector.class.getCanonicalName());
 
     @Override
-    public void addRule(FraudDetectionRule rule) {
+    public void addRule(FraudDetectionRule<CreditRecord> rule) {
         this.rules.add(rule);
     }
 
     @Override
-    public FraudResult detectAndGetFraudulentRecords(List<CreditRecord> dataSet) {
+    public FraudResult<CreditRecord> detectAndGetFraudulentRecords(List<CreditRecord> dataSet) {
         logger.info("Starting fraudulent record service for " + dataSet.size() + " records");
-        FraudResult result = new CreditFraudResult();
+        FraudResult<CreditRecord> result = new CreditFraudResult();
 
         try {
-            for (FraudDetectionRule rule : rules) {
+            for (FraudDetectionRule<CreditRecord> rule : rules) {
                 List<CreditRecord> records = rule.validateDateSetAndGetAnomalies(dataSet);
                 result.addRuleAndRecords(rule, records);
             }

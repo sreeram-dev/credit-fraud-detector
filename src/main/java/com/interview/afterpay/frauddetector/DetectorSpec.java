@@ -11,9 +11,14 @@ import java.util.Observer;
  * @param <T>
  */
 public interface DetectorSpec<T> {
-    void addRule(FraudDetectionRule rule);
 
-    FraudResult detectAndGetFraudulentRecords(List<T> dataSet);
+    /**
+     * Add a rule or constraint that the detector has to evaluate against
+     * @param rule
+     */
+    void addRule(FraudDetectionRule<T> rule);
+
+    FraudResult<T> detectAndGetFraudulentRecords(List<T> dataSet);
 
     /**
      * Notify observers if the detector has executed successfully

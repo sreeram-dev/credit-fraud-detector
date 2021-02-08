@@ -26,7 +26,7 @@ public class CreditRecord implements Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append("\nRecord: HashedCardId: " + getHashedCardId() + "\n");
         builder.append("Transaction Time: " + getTransactionTime() + "\n");
-        builder.append("Amount: " + (getAmount() / 100.00) + " dollars \n");
+        builder.append("Amount: " + getAmountInDollars() + " dollars \n");
 
         return builder.toString();
     }
@@ -53,5 +53,13 @@ public class CreditRecord implements Serializable {
 
     public Integer getAmount() {
         return this.amount;
+    }
+
+    public Integer getAmountInCents() {
+        return this.getAmount();
+    }
+
+    public Double getAmountInDollars() {
+        return this.getAmount() / 100.00;
     }
 }

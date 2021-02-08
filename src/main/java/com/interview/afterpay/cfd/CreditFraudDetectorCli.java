@@ -1,7 +1,6 @@
 package com.interview.afterpay.cfd;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,19 +9,22 @@ import java.util.concurrent.Callable;
 
 import com.interview.afterpay.entities.CreditFraudResult;
 import com.interview.afterpay.frauddetector.BatchCreditFraudDetector;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.apache.logging.log4j.core.config.Configurator;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.ITypeConverter;
-import picocli.CommandLine.IExecutionExceptionHandler;
-import picocli.CommandLine.IParameterExceptionHandler;
 import picocli.CommandLine.ParameterException;
+import picocli.CommandLine.Spec;
+
+import picocli.CommandLine.Model.CommandSpec;
+
+
 
 import com.interview.afterpay.frauddetector.builders.CreditFraudDetectorBuilder;
 import com.interview.afterpay.frauddetector.rules.CannotExceedCreditWithdrawal;
@@ -45,12 +47,27 @@ public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord
 
     @Parameters(index = "0", converter = AmountConverter.class,
         description = "Amount in dollars and cents (10.00) to set " +
-            "as threshold for fraudulent transactions")
+            "as threshold for fraudulent transactions", paramLabel = "FLOAT")
     private Integer amount;
 
-    @Parameters(index = "1",
-        description = "Path to the credit report")
     private File report;
+
+    @Parameters(index = "1",
+        description = "Path to the credit report", paramLabel="FILE")
+    private void setReport(File file) {
+        // If the file does not exist or cannot be read, Throw an exception when parsing the arguments
+        if (!file.exists()) {
+            throw new ParameterException(spec.commandLine(), "File given does not exist");
+        }
+
+        if (file.exists() && !file.canRead()) {
+            throw new ParameterException(spec.commandLine(), "File given cannot be read");
+        }
+
+        report = file;
+    }
+    // injected by picocli
+    @Spec CommandSpec spec;
 
     /**
      * Used code from the internet Apache v2 License
@@ -81,8 +98,7 @@ public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord
                 CreditFraudDetectorCli cli =  parseResult.commandSpec().commandLine().getCommand();
                 cli.configureLoggers();
                 return new CommandLine.RunLast().execute(parseResult);
-            })
-            .setParameterExceptionHandler(new StackTracePrintHandler());
+            });
 
         int exitCode = cmd.execute(args);
         System.exit(exitCode);
@@ -119,55 +135,5 @@ class AmountConverter implements ITypeConverter<Integer> {
     public Integer convert(String value) throws Exception {
         Integer val = (int) (Double.parseDouble(value) * 100);
         return val;
-    }
-}
-
-/**
- * Taken from the documentation
- * https://picocli.info/
- */
-class StackTracePrintHandler implements IParameterExceptionHandler {
-
-    public int handleParseException(ParameterException ex, String[] args) {
-        CommandLine cmd = ex.getCommandLine();
-        PrintWriter err = cmd.getErr();
-
-        // if tracing at DEBUG level, show the location of the issue
-        if ("DEBUG".equalsIgnoreCase(System.getProperty("picocli.trace"))) {
-            err.println(cmd.getColorScheme().stackTraceText(ex));
-        }
-        ex.printStackTrace(err);
-
-        err.println(cmd.getColorScheme().errorText(ex.getMessage())); // bold red
-        CommandLine.UnmatchedArgumentException.printSuggestions(ex, err);
-        err.print(cmd.getHelp().fullSynopsis());
-
-        CommandLine.Model.CommandSpec spec = cmd.getCommandSpec();
-        err.printf("Try '%s --help' for more information.%n", spec.qualifiedName());
-
-        return cmd.getExitCodeExceptionMapper() != null
-            ? cmd.getExitCodeExceptionMapper().getExitCode(ex)
-            : spec.exitCodeOnInvalidInput();
-    }
-}
-
-
-/**
- * Modified code from documentation
- * https://picocli.info/
- */
-class BusinessStackTraceHandler implements IExecutionExceptionHandler {
-    public int handleExecutionException(Exception ex,
-                                        CommandLine cmd,
-                                        CommandLine.ParseResult parseResult) {
-
-        // bold red error message
-        cmd.getErr().println(cmd.getColorScheme().errorText(ex.getMessage()));
-        PrintWriter err = cmd.getErr();
-        ex.printStackTrace(err);
-
-        return cmd.getExitCodeExceptionMapper() != null
-            ? cmd.getExitCodeExceptionMapper().getExitCode(ex)
-            : cmd.getCommandSpec().exitCodeOnExecutionException();
     }
 }
