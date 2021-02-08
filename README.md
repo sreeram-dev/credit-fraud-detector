@@ -10,6 +10,11 @@ Build System: Gradle 6.8.1 <br/>
 Java Target: Java 8 <br/>
 Testing Engine: JUnit 5 <br/>
 
+Third Party Libraries Used:  
+1. Picocli - https://picocli.info/ - a mighty tiny command line interface.
+2. OpenCSV - For parsing CSV files. 
+3. Hamcrest - for more powerful matchers to assert in tests.
+
 ## Installation
 
 The project uses Gradle 6.8.1 as the build tool.
