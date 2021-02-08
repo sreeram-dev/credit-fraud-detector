@@ -104,6 +104,7 @@ class CreditFraudDetectorCliTest {
             hasItems("10d7ce2f43e35fa57d1bbf8b1e2", "20e6ce2f43e35fa57d1bbf8b1e2"));
 
         out.reset();
+        err.reset();
         args = new String[]{"150.00$", "src/test/resources/testcase_valid_overlapping.csv"};
         cmd.execute(args);
         result = cmd.getExecutionResult();
