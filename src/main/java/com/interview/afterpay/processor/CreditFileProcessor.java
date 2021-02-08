@@ -12,10 +12,10 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CreditFileProcessor implements Processor<CreditRecord> {
 
@@ -46,6 +46,23 @@ public class CreditFileProcessor implements Processor<CreditRecord> {
         while ((line = reader.readNext()) != null) {
             records.add(processLineAndGetRecord(line));
         }
+
+        // Sort them in non-decreasing order
+        Collections.sort(records, new Comparator<CreditRecord>() {
+            @Override
+            public int compare(CreditRecord rec1, CreditRecord rec2) {
+                Duration diff = Duration.between(rec1.getTransactionTime(), rec2.getTransactionTime());
+                if (diff.isNegative()) {
+                    return 1;
+                }
+
+                if (diff.isZero()) {
+                    return 0;
+                }
+
+                return -1;
+            }
+        });
 
         return records;
     }

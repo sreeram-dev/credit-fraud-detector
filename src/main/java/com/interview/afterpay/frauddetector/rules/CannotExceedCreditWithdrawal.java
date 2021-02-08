@@ -41,7 +41,7 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
      */
     @Override
     public List<CreditRecord> validateDateSetAndGetAnomalies(List<CreditRecord> creditRecords) {
-        logger.info("Validating " + creditRecords.size() + " records against constraint");
+        logger.info("Validating " + creditRecords.size() + " records against the constraint");
         List<CreditRecord> failedRecords = new ArrayList<>();
 
         Map<String, List<CreditRecord>> limits = new HashMap<>();
@@ -52,36 +52,36 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
             LocalDateTime currentTime = record.getTransactionTime();
             // minus 24 hours
             LocalDateTime thresholdTime = currentTime.minusHours(this.windowDuration.toHours());
+            logger.info("Record: " + record.getHashedCardId() +
+                ": transactionTime: " + currentTime +
+                " thresholdTime: " + thresholdTime + " current sum: " + runningSum.getOrDefault(id, 0));
 
-            if (!limits.containsKey(record.getHashedCardId())) {
-                limits.put(id, new ArrayList<>());
-                limits.get(id).add(record);
-                runningSum.put(id, record.getAmount());
-            } else {
-                List<CreditRecord> currentRecords = limits.get(id);
-                while (!currentRecords.isEmpty()) {
-                    CreditRecord rec = currentRecords.get(0);
-                    LocalDateTime curTime = rec.getTransactionTime();
-                    if (Duration.between(thresholdTime, curTime).isNegative()) {
-                        Integer amt = rec.getAmount();
-                        // atomic condition to prevent race conditions
-                        synchronized (this) {
-                            currentRecords.remove(0);
-                            runningSum.put(id, runningSum.get(id) - amt);
-                        }
-                    } else {
-                        break;
-                    }
+            while (limits.containsKey(id) && !limits.get(id).isEmpty()) {
+                CreditRecord curRecord = limits.get(id).get(0);
+                LocalDateTime curTime = curRecord.getTransactionTime();
+                if (Duration.between(thresholdTime, curTime).isNegative()) {
+                    // atomic condition to prevent race conditions
+
+                    limits.get(id).remove(0);
+                    runningSum.put(id, runningSum.get(id) - curRecord.getAmount());
+                } else {
+                    break;
                 }
             }
 
-            // atomic condition to prevent race conditions
-            synchronized (this) {
+            if (!limits.containsKey(id)) {
+                // atomic condition to prevent race conditions
+                runningSum.put(id, record.getAmount());
+                limits.put(id, new ArrayList<>());
+            } else {
                 runningSum.put(id, runningSum.get(id) + record.getAmount());
-                limits.get(id).add(record);
             }
 
+            limits.get(id).add(record);
+
+            // Check if the sum in the last 24 hours exceeds the threshold amount
             if (runningSum.get(id) > this.thresholdAmount) {
+                logger.info("FAILING id: " + id + " amount: " + runningSum.get(id) + " threshold: " + this.thresholdAmount);
                 failedRecords.add(record);
             }
         }
