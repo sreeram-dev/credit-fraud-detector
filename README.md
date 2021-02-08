@@ -1,6 +1,7 @@
 # Afterpay Coding Assignment
 
-![Java CI with Gradle](https://github.com/sreeram-boyapati/credit-fraud-detector/workflows/Java%20CI%20with%20Gradle/badge.svg)
+![Build Status](https://github.com/sreeram-boyapati/credit-fraud-detector/workflows/Java%20CI%20with%20Gradle/badge.svg)
+![Coverage](https://github.com/sreeram-boyapati/credit-fraud-detector/blob/master/.github/badges/jacoco.svg)
 
 <br/>
 A credit fraud detector that parses a file and gives out fraudalent IDs as per the threshold amount provided as an option.
