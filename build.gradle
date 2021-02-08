@@ -60,4 +60,3 @@ jacocoTestReport {
         csv.enabled true
     }
 }
-
