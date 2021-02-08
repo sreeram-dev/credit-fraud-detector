@@ -17,7 +17,7 @@ The project uses Gradle 6.8.1 as the build tool.
 Please run `./gradlew build` to build the project for generating the CLI tool.
 The CLI tool is path dependent on libraries and will be in the folder `build/distributions/cfd-0.1-DEMO/bin`
 
-Please create a symbolic link to cli tool using the following command for general usage
+For distribution, Please create a symbolic link to cli tool using the following command for general usage
 `sudo ln -s build/distributions/cfd-0.1-DEMO/bin/cfd ~/.local/bin/cfd`.
 
 
@@ -25,8 +25,12 @@ Please create a symbolic link to cli tool using the following command for genera
 Please use the CLI_tool run configuration in the `.idea` directory to test run
 the application with test files from the `src/test/resources` java.
 
+For standalone testing use `./gradlew run`. <br\>
+Here is an example command using test resources:
+`./gradlew run --args="\$150 src/test/resources/testcase_valid_overlapping.csv -v"`
+
 ## Testing
-Please run the following command to run the tests  
+Please run the following command to run the tests
 `./gradlew test`
 
 Tests are located in the `src/test/java/` folder and follow the layout guidelines for gradle/maven projects.

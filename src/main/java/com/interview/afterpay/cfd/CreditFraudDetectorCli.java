@@ -130,14 +130,12 @@ public class CreditFraudDetectorCli implements Callable<FraudResult<CreditRecord
 class AmountConverter implements ITypeConverter<Integer> {
 
     public Integer convert(String value) throws Exception {
-
         if  (value.isEmpty()) {
             throw new IllegalArgumentException("Amount is not specified");
         }
         // trim the dollar sign
         if (value.charAt(0) == '$') {
             value = value.substring(1);
-            LogManager.getRootLogger().info("value processed: " + value);
         } else if (value.charAt(value.length()-1) == '$') {
             value = value.substring(0, value.length()-1);
         }
