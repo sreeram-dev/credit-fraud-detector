@@ -1,5 +1,7 @@
 # Afterpay Coding Assignment
 
+![build status](https://github.com/sreeram-boyapati/credit-fraud-detector/blob/master/.github/workflows/gradle.yml/badge.svg?branch=master)
+
 A credit fraud detector that parses a file and gives out fraudalent IDs
 as per the threshold amount provided as an option.
 
