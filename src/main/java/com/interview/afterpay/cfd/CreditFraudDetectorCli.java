@@ -21,10 +21,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.ITypeConverter;
 import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
-
 import picocli.CommandLine.Model.CommandSpec;
-
-
 
 import com.interview.afterpay.frauddetector.builders.CreditFraudDetectorBuilder;
 import com.interview.afterpay.frauddetector.rules.CannotExceedCreditWithdrawal;
