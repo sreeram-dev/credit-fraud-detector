@@ -33,7 +33,7 @@ the application with test files from the `src/test/resources` java.
 
 For standalone testing use `./gradlew run`. <br\>
 Here is an example command using test resources:
-`./gradlew run --args="\$150 src/test/resources/testcase_valid_overlapping.csv -v"`
+`./gradlew run --args="150 src/test/resources/testcase_valid_overlapping.csv -v"`
 
 ## Testing
 Please run the following command to run the tests
