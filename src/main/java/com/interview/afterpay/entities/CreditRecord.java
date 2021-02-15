@@ -23,12 +23,10 @@ public class CreditRecord implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("\nRecord: HashedCardId: " + getHashedCardId() + "\n");
-        builder.append("Transaction Time: " + getTransactionTime() + "\n");
-        builder.append("Amount: " + getAmountInDollars() + " dollars \n");
-
-        return builder.toString();
+        String builder = "\nRecord: HashedCardId: " + getHashedCardId() + "\n" +
+            "Transaction Time: " + getTransactionTime() + "\n" +
+            "Amount: " + getAmountInDollars() + " dollars \n";
+        return builder;
     }
 
     public String getHashedCardId() {

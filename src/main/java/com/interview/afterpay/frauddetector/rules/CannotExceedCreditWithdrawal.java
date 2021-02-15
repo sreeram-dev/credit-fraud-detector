@@ -105,10 +105,8 @@ public class CannotExceedCreditWithdrawal implements FraudDetectionRule<CreditRe
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("\nRuleName: " + NAME + "\n");
-        builder.append("Parameter#1 Threshold Amount: " + thresholdAmount + "\n");
-        builder.append("Parameter#2 WindowDuration: " + windowDuration.toString() + "\n");
-        return builder.toString();
+        return "\nRuleName: " + NAME + "\n" +
+            "Parameter#1 Threshold Amount: " + thresholdAmount + "\n" +
+            "Parameter#2 WindowDuration: " + windowDuration.toString() + "\n";
     }
 }
