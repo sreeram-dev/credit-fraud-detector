@@ -62,3 +62,7 @@ to run individual tests
 6. com.interview.afterpay.frauddetector.processor - The processors to
    deserialize a credit card statement to a list of CreditRecord entities. Only
    CSV file is supported at present.
+
+
+## Licence
+Licensed under GPLv3 License
